@@ -244,10 +244,10 @@ class SccSmoother:
             self.btn = self.get_button(CS.cruiseState_speed * self.speed_conv_to_clu)
         elif ascc_auto_set and clu11_speed < 30:
           if self.autosetopt:  
-            self.btn = Buttons.RES_ACCEL
+            self.btn = Buttons.SET_DECEL
         else:
           if self.autosetopt:
-            self.btn = Buttons.SET_DECEL
+            self.btn = Buttons.RES_ACCEL
         self.alive_count = SccSmoother.get_alive_count()
 
       if self.btn != Buttons.NONE:
