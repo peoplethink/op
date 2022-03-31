@@ -69,8 +69,7 @@ def manager_init() -> None:
     ("IsOpenpilotViewEnabled", "0"),
     ("NewRadarInterface", "0"),
     ("AutoSetOpt", "1"),
-    ("PutPrebuilt", "0"),
-    ("SteerLockout", "0"),  
+    ("PutPrebuilt", "0"), 
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))

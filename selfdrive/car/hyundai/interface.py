@@ -43,10 +43,7 @@ class CarInterface(CarInterfaceBase):
     ret.radarOffCan = RADAR_START_ADDR not in fingerprint[1] or DBC[ret.carFingerprint]["radar"] is None
 
     tire_stiffness_factor = 0.85
-    if Params().get_bool('SteerLockout'):
-      ret.maxSteeringAngleDeg = 1000
-    else:
-      ret.maxSteeringAngleDeg = 90
+    ret.maxSteeringAngleDeg = 1000.
 
     # -------------PID
     if Params().get("LateralControlSelect", encoding='utf8') == "0":
@@ -122,7 +119,6 @@ class CarInterface(CarInterfaceBase):
       ret.mass = 1900. + STD_CARGO_KG
       ret.wheelbase = 3.01
       ret.centerToFront = ret.wheelbase * 0.4
-      ret.maxSteeringAngleDeg = 90.
     elif candidate == CAR.GENESIS_G70:
       ret.mass = 1640. + STD_CARGO_KG
       ret.wheelbase = 2.84

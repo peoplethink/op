@@ -445,11 +445,6 @@ VIPPanel::VIPPanel(QWidget* parent) : QWidget(parent) {
                                             "NDA 카메라 과속시 핸들진동 선택",
                                             "../assets/offroad/icon_openpilot.png",
                                             this));
-  layout->addWidget(new ParamControl("SteerLockout",
-                                            "90도 이상 조향가능차량 선택",
-                                            "90도 이상 조향가능차량만 선택(제네시스DH제외).",
-                                            "../assets/offroad/icon_road.png",
-                                            this));
   
   layout->addWidget(horizontal_line());
 }
