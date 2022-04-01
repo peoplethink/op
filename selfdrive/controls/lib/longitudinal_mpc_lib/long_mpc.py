@@ -35,7 +35,7 @@ X_EGO_COST = 0.
 V_EGO_COST = 0.
 A_EGO_COST = 0.
 J_EGO_COST = 1.5
-A_CHANGE_COST = 100. # 200.
+A_CHANGE_COST = 50. # 200.
 DANGER_ZONE_COST = 100.
 CRASH_DISTANCE = .5
 LIMIT_COST = 1e6
@@ -45,8 +45,10 @@ ACADOS_SOLVER_TYPE = 'SQP_RTI'
 CRUISE_GAP_BP = [1., 2., 3., 4.]
 CRUISE_GAP_V = [1.0, 1.2, 1.6, 1.6]
 
-AUTO_TR_BP = [30.*CV.KPH_TO_MS, 60.*CV.KPH_TO_MS, 100.*CV.KPH_TO_MS]
-AUTO_TR_V = [1.0, 1.1, 1.2]
+#AUTO_TR_BP = [30.*CV.KPH_TO_MS, 60.*CV.KPH_TO_MS, 100.*CV.KPH_TO_MS]
+#AUTO_TR_V = [1.0, 1.1, 1.2]
+AUTO_TR_BP = [0., 30.*CV.KPH_TO_MS, 70.*CV.KPH_TO_MS, 110.*CV.KPH_TO_MS]
+AUTO_TR_V = [1.0, 1.1, 1.2, 1.45]
 
 AUTO_TR_CRUISE_GAP = 4
 
@@ -206,11 +208,14 @@ class LongitudinalMpc:
   def __init__(self, e2e=False):
     self.e2e = e2e
     self.v_ego = 0.
+    self.solver = AcadosOcpSolverCython(MODEL_NAME, ACADOS_SOLVER_TYPE, N)
     self.reset()
     self.source = SOURCES[2]
 
   def reset(self):
-    self.solver = AcadosOcpSolverCython(MODEL_NAME, ACADOS_SOLVER_TYPE, N)
+    # self.solver = AcadosOcpSolverCython(MODEL_NAME, ACADOS_SOLVER_TYPE, N)
+    self.solver.reset()
+    # self.solver.options_set('print_level', 2)
     self.v_solution = np.zeros(N+1)
     self.a_solution = np.zeros(N+1)
     self.prev_a = np.array(self.a_solution)
@@ -380,6 +385,8 @@ class LongitudinalMpc:
     self.run()
 
   def run(self):
+    # t0 = sec_since_boot()
+    # reset = 0
     for i in range(N+1):
       self.solver.set(i, 'p', self.params[i])
     self.solver.constraints_set(0, "lbx", self.x0)
@@ -414,6 +421,8 @@ class LongitudinalMpc:
         self.last_cloudlog_t = t
         cloudlog.warning(f"Long mpc reset, solution_status: {self.solution_status}")
       self.reset()
+      # reset = 1
+    # print(f"long_mpc timings: total internal {self.solve_time:.2e}, external: {(sec_since_boot() - t0):.2e} qp {self.time_qp_solution:.2e}, lin {self.time_linearization:.2e} qp_iter {qp_iter}, reset {reset}")
 
 
 if __name__ == "__main__":
