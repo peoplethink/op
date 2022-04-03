@@ -51,7 +51,7 @@ class CarController:
     self.params = CarControllerParams(CP)
     self.packer = CANPacker(dbc_name)
     self.frame = 0
-    
+
     self.angle_limit_counter = 0
 
     self.apply_steer_last = 0
